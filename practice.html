@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>RareSight practice game</title>
+<style>
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #1d2433; color: #f3f1ea; font: 16px/1.4 system-ui, sans-serif; }
+  .game { width: min(560px, 92vw); background: #273047; border-radius: 18px; padding: 28px; box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+  .round { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: #9fb0d4; }
+  #question { font-size: 26px; font-weight: 700; margin: 10px 0 18px; min-height: 2.4em; }
+  .bar { height: 8px; background: #1a2030; border-radius: 99px; overflow: hidden; margin-bottom: 18px; }
+  .bar i { display: block; height: 100%; background: #5ed1a0; width: 100%; }
+  form { display: flex; gap: 8px; }
+  input { flex: 1; font: inherit; padding: 12px 14px; border-radius: 10px; border: 0; background: #f3f1ea; color: #111; }
+  button { font: inherit; font-weight: 700; padding: 0 18px; border-radius: 10px; border: 0; background: #5ed1a0; cursor: pointer; }
+  #log { margin-top: 16px; font-size: 14px; color: #c8d2e8; }
+  #log div { padding: 3px 0; }
+</style>
+</head>
+<body>
+<div class="game">
+  <div class="round">Round <span id="round">1</span> · <span id="left">10</span>s</div>
+  <div id="question"></div>
+  <div class="bar"><i id="bar"></i></div>
+  <form id="f"><input id="answer" placeholder="Your answer…" autocomplete="off"><button>Send</button></form>
+  <div id="log"></div>
+</div>
+<script>
+  const QUESTIONS = [
+    'Citez un pays d’Afrique', 'Name a moon of a planet in the Solar System', 'Citez un peintre impressionniste',
+    'Name a chemical element', 'Citez un fleuve d’Europe', 'Name a play by Shakespeare', 'Citez un compositeur de musique classique',
+    'Name a bone of the human body', 'Citez une capitale d’Amérique du Sud', 'Name a dog breed', 'Citez un dieu de la mythologie grecque'
+  ];
+  const ROUND_S = 10, PAUSE_S = 3;
+  let round = 0, t0 = 0, active = false, order = QUESTIONS.slice().sort(() => Math.random() - .5);
+  const $ = (id) => document.getElementById(id);
+  function next() {
+    round++;
+    $('round').textContent = round;
+    $('question').textContent = order[(round - 1) % order.length];
+    $('answer').value = '';
+    t0 = performance.now(); active = true;
+  }
+  function tick() {
+    if (active) {
+      const left = Math.max(0, ROUND_S - (performance.now() - t0) / 1000);
+      $('left').textContent = left.toFixed(0);
+      $('bar').style.width = (left / ROUND_S * 100) + '%';
+      if (left <= 0) { active = false; $('question').textContent = ''; setTimeout(next, PAUSE_S * 1000); }
+    }
+    requestAnimationFrame(tick);
+  }
+  $('f').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const v = $('answer').value.trim();
+    if (!v) return;
+    const d = document.createElement('div');
+    d.textContent = `Round ${round}: “${v}”` + (active ? '' : ' (too late)');
+    $('log').prepend(d);
+    $('answer').value = '';
+  });
+  setTimeout(next, 800);
+  tick();
+</script>
+</body>
+</html>

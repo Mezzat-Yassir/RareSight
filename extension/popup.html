@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="ui.css">
+</head>
+<body class="popup">
+  <header>
+    <span class="logo"></span><b>RareSight</b><span class="sp"></span>
+    <button id="opt" class="ghost small">Settings</button>
+  </header>
+
+  <div id="prov" class="card"></div>
+
+  <div class="grid">
+    <button id="toggle" class="primary">Show panel on this site</button>
+    <button id="pick">◎&nbsp; Pick the question element (auto mode)</button>
+    <button id="ask">⚡&nbsp; Answer now</button>
+    <button id="shot">📷&nbsp; Read question from screenshot</button>
+  </div>
+  <button id="unauto" class="ghost small" hidden>Stop auto-detect on this site</button>
+
+  <section class="keys">
+    <h3>Shortcuts</h3>
+    <ul id="keys"></ul>
+    <button id="editkeys" class="ghost small">Change shortcuts</button>
+  </section>
+
+  <script src="defaults.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

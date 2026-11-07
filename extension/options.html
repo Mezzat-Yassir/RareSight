@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>RareSight settings</title>
+  <link rel="stylesheet" href="ui.css">
+</head>
+<body class="options">
+<main>
+  <header class="hero">
+    <span class="logo big"></span>
+    <div>
+      <h1>RareSight</h1>
+      <p>Rare-answer cheat screen for speed trivia games</p>
+    </div>
+    <span class="sp"></span>
+    <span id="saved" class="saved">✓ saved</span>
+  </header>
+
+  <section class="card">
+    <h2>1 · AI provider</h2>
+    <label>Provider
+      <select id="provider"></select>
+    </label>
+    <p id="provNote" class="note"></p>
+    <label id="keyWrap">API key
+      <div class="row">
+        <input id="key" type="password" placeholder="Paste your API key" autocomplete="off" spellcheck="false">
+        <button id="showKey" class="ghost" type="button">Show</button>
+      </div>
+      <span class="note"><a id="keyLink" href="#" target="_blank" rel="noreferrer">Get a key →</a> · stored only in this browser</span>
+    </label>
+    <div class="two">
+      <label>Model
+        <input id="model" spellcheck="false">
+      </label>
+      <label id="baseWrap">Base URL
+        <input id="base" spellcheck="false">
+      </label>
+    </div>
+    <label>Test it
+      <div class="row">
+        <input id="testQ" value="Name a country in Africa" spellcheck="false">
+        <button id="test" class="primary" type="button">Run test</button>
+      </div>
+    </label>
+    <pre id="testOut"></pre>
+  </section>
+
+  <section class="card">
+    <h2>2 · Answers</h2>
+    <div class="two">
+      <label>Answer language
+        <select id="language"></select>
+      </label>
+      <label>Number of answers
+        <input id="count" type="number" min="1" max="15">
+      </label>
+    </div>
+    <label>Rarity strategy
+      <select id="strategy">
+        <option value="balanced">Balanced — rare answers + 2 safer backups</option>
+        <option value="rare">Rare — nearly all rare, 1 backup</option>
+        <option value="extreme">Extreme — the most obscure answers that are still valid</option>
+      </select>
+    </label>
+    <label>Extra instructions for the AI (optional)
+      <textarea id="extraInstructions" placeholder="e.g. The game only accepts one word. Write French names without accents. Avoid answers from before 1900."></textarea>
+    </label>
+  </section>
+
+  <section class="card">
+    <h2>3 · Gameplay</h2>
+    <label class="check"><input type="checkbox" id="autoSubmit"> Press Enter automatically after typing an answer into the game</label>
+    <label class="check"><input type="checkbox" id="digitHotkeys"> <span><kbd>Alt</kbd>+<kbd>1</kbd>…<kbd>9</kbd> types answer 1…9 into the game, <kbd>Alt</kbd>+<kbd>0</kbd> asks for more answers</span></label>
+    <label class="check"><input type="checkbox" id="screenshotFallback"> “Answer now” reads a screenshot when no text is selected or detected</label>
+    <div class="two">
+      <label>Countdown on the panel (seconds, 0 = off)
+        <input id="timerSeconds" type="number" min="0" max="120">
+      </label>
+      <label>Wait until the question text is stable (ms)
+        <input id="stabilityMs" type="number" min="0" max="3000" step="50">
+      </label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>4 · Panel</h2>
+    <div class="two">
+      <label>Background opacity
+        <input type="range" id="opacity" min="0.4" max="1" step="0.01">
+      </label>
+      <label>Text size
+        <input type="range" id="fontSize" min="11" max="20" step="1">
+      </label>
+    </div>
+    <button id="resetPos" type="button">Reset panel position</button>
+  </section>
+
+  <section class="card">
+    <h2>5 · Memory &amp; sites</h2>
+    <label class="check"><input type="checkbox" id="cacheEnabled"> Remember answers to questions already seen (instant when a question comes back)</label>
+    <div class="row">
+      <span id="cacheInfo" class="note" style="margin:0;flex:1"></span>
+      <button id="clearCache" class="small" type="button">Forget remembered answers</button>
+    </div>
+    <h3>Auto-detect is set up on</h3>
+    <ul id="selList"></ul>
+    <p id="selEmpty" class="note">No site yet. On your game, click ◎ in the panel and then click the question text.</p>
+  </section>
+
+  <section class="card help">
+    <h2>How to use</h2>
+    <ol>
+      <li>Paste an API key above and press <b>Run test</b>. Gemini and Groq both have free tiers; Groq is the fastest, Gemini can also read screenshots.</li>
+      <li>Open the game tab and press <kbd>Alt+Shift+S</kbd> (or use the toolbar icon) to show the panel.</li>
+      <li>When a question is on screen, click <b>◎</b> (or <kbd>Alt+Shift+E</kbd>) and click the question text. From then on every new question is answered automatically, with no key to press.</li>
+      <li>Answers stream in, rarest first. Click one, or press <kbd>Alt+1</kbd>…<kbd>Alt+9</kbd>, to type it into the game's answer box. Click the game's answer box once at the start so RareSight knows where to type.</li>
+      <li>Want other options? Click <b>↻ More answers</b> (or <kbd>Alt+0</kbd>) for a fresh batch, never repeating an answer already shown. Earlier answers stay below as small clickable chips.</li>
+      <li>No auto-detect? Select the question text and press <kbd>Alt+Shift+Q</kbd>. With nothing selected, it reads a screenshot instead (needs a vision model).</li>
+    </ol>
+  </section>
+</main>
+<script src="defaults.js"></script>
+<script src="options.js"></script>
+</body>
+</html>
